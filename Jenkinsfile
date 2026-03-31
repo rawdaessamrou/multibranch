@@ -1,14 +1,47 @@
 pipeline {
     agent any
+
+    parameters {
+        choice(
+            name: 'ENVIRONMENT',
+            choices: ['dev', 'staging', 'production'],
+            description: 'Select deployment environment'
+        )
+    }
+
     stages {
-        stage('Hello Stage 1') {
+
+        stage('Build') {
             steps {
-                echo 'Hello from Stage 1'
+                echo "Building application..."
             }
         }
-        stage('Hello Stage 2') {
+
+        stage('Deploy to Dev') {
+            when {
+                expression { params.ENVIRONMENT == 'dev' }
+            }
             steps {
-                echo 'Hello from Stage 2'
+                echo "Deploying to DEV environment"
+            }
+        }
+
+        stage('Deploy to Staging') {
+            when {
+                expression { params.ENVIRONMENT == 'staging' }
+            }
+            steps {
+                echo "Deploying to STAGING environment"
+            }
+        }
+
+        stage('Deploy to Production') {
+            when {
+                expression { params.ENVIRONMENT == 'production' }
+            }
+            steps {
+                echo " Deploying to PRODUCTION environment"
+
             }
         }
     }
